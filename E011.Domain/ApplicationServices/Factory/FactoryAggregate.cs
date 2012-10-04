@@ -43,6 +43,8 @@ namespace E011
         {
             //Print("?> Command: Assign employee {0} to factory", employeeName);
 
+            OpenedFactory();
+
             if (_state.ListOfEmployeeNames.Contains(employeeName))
             {
                 // yes, this is really weird check, but this factory has really strict rules.
@@ -65,6 +67,7 @@ namespace E011
 
         public void TransferShipmentToCargoBay(string shipmentName, InventoryShipment shipment)
         {
+            OpenedFactory();
             //Print("?> Command: transfer shipment to cargo bay");
             if (_state.ListOfEmployeeNames.Count == 0)
             {
@@ -96,6 +99,7 @@ namespace E011
 
         public void UnloadShipmentFromCargoBay(string employeeName)
         {
+            OpenedFactory();
             //Print("?> Command: Unload Shipment From Cargo Bay");
 
             if (!_state.ListOfEmployeeNames.Contains(employeeName))
@@ -123,6 +127,8 @@ namespace E011
 
         public void ProduceCar(string employeeName, string carModel, ICarBlueprintLibrary library)
         {
+            OpenedFactory();
+
             if (!_state.ListOfEmployeeNames.Contains(employeeName))
                 throw DomainError.Named("unknown-employee", ":> '{0}' not assigned to factory", employeeName);
 
@@ -161,6 +167,13 @@ namespace E011
             Changes.Add(e);
             // and also immediately change the state
             _state.Mutate(e);
+        }
+
+        void OpenedFactory()
+        {
+            if(_state.Id==null)
+                throw DomainError.Named("factory-is-not-open", "Factory is not open");
+
         }
     }
     // domain service

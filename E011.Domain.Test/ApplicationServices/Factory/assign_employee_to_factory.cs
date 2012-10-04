@@ -6,7 +6,7 @@ namespace E011.Domain.ApplicationServices.Factory
     public class assign_employee_to_factory : factory_syntax
     {
         [Test]
-        public void empty_factory()
+        public void correct_assign_employee()
         {
             Given(new FactoryOpened(FactoryId.ForTest));
             When(new AssignEmployeeToFactory(FactoryId.ForTest,"fry"));
@@ -26,6 +26,13 @@ namespace E011.Domain.ApplicationServices.Factory
             Given(new FactoryOpened(FactoryId.ForTest));
             When(new AssignEmployeeToFactory(FactoryId.ForTest, "bender"));
             Expect("bender-employee");
+        }
+
+        [Test]
+        public void factory_not_open()
+        {
+            When(new AssignEmployeeToFactory(FactoryId.ForTest, "fry"));
+            Expect("factory-is-not-open");
         }
     }
 }

@@ -34,5 +34,12 @@ namespace E011.Domain.ApplicationServices.Factory
             When(new TransferShipmentToCargoBay(FactoryId.ForTest, "shipmt-13", new[] { new CarPart("bmw6", 20) }));
             Expect("more-than-two-InventoryShipments");
         }
+
+        [Test]
+        public void factory_not_open()
+        {
+            When(new TransferShipmentToCargoBay(FactoryId.ForTest, "some shipment", new CarPart[0]));
+            Expect("factory-is-not-open");
+        }
     }
 }

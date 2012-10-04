@@ -51,6 +51,12 @@ namespace E011.Domain.ApplicationServices.Factory
             When(new UnloadShipmentFromCargoBay(Id, "fry"));
             Expect("empty-InventoryShipments");
         }
- 
+
+        [Test]
+        public void factory_not_open()
+        {
+            When(new UnloadShipmentFromCargoBay(Id, "fry"));
+            Expect("factory-is-not-open");
+        }
     }
 }

@@ -52,5 +52,12 @@ namespace E011.Domain.ApplicationServices.Factory
 
             Expect(new CarProduced(FactoryId.ForTest,"fry", "Ford", new[] { new CarPart("chassis", 1), new CarPart("wheels", 4), new CarPart("engine", 1) }));
         }
+
+        [Test]
+        public void factory_not_open()
+        {
+            When(new ProduceCar(FactoryId.ForTest, "fry", "Ford"));
+            Expect("factory-is-not-open");
+        }
     }
 }
