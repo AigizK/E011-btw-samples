@@ -34,8 +34,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework">
-      <HintPath>..\..\_misc\lib-dotnet\NUnit\nunit.framework.dll</HintPath>
+    <Reference Include="nunit.framework, Version=2.5.10.11092, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\NUnit\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -43,14 +44,9 @@
     <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractIdentity.cs" />
     <Compile Include="Builder.cs" />
-    <Compile Include="Describe.Factory.cs" />
     <Compile Include="CompareObjects.cs" />
-    <Compile Include="Describe.cs" />
     <Compile Include="factory_spec.cs" />
-    <Compile Include="Interfaces.cs" />
-    <Compile Include="Messages.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="factory.cs" />
     <Compile Include="framework.cs" />
@@ -62,9 +58,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Messages.ddd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

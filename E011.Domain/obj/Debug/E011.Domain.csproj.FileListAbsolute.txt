@@ -1,6 +1,4 @@
-C:\Projects\learning-aes\E011.Domain\bin\Debug\E011.Domain.exe.config
-C:\Projects\learning-aes\E011.Domain\bin\Debug\E011.Domain.exe
+C:\Projects\learning-aes\E011.Domain\bin\Debug\E011.Domain.dll
 C:\Projects\learning-aes\E011.Domain\bin\Debug\E011.Domain.pdb
-C:\Projects\learning-aes\E011.Domain\obj\Debug\E011.Domain.csprojResolveAssemblyReference.cache
-C:\Projects\learning-aes\E011.Domain\obj\Debug\E011.Domain.exe
+C:\Projects\learning-aes\E011.Domain\obj\Debug\E011.Domain.dll
 C:\Projects\learning-aes\E011.Domain\obj\Debug\E011.Domain.pdb

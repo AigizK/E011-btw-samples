@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-
-namespace E005_testing_use_cases
+namespace E011
 {
     /// <summary>
     /// Strongly-typed identity class. Essentially just an ID with a 

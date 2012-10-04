@@ -1,5 +1,5 @@
-namespace E005_testing_use_cases;             // put all generated classes into this namespace
-extern "E005";    
+namespace E011;             // put all generated classes into this namespace
+extern "E011";    
 
 const employee = string employeeName;
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace E005_testing_use_cases
+namespace E011
 {
     public interface ISampleMessage { }
 
