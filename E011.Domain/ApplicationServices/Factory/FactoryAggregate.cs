@@ -25,16 +25,11 @@ namespace E011
             _state = state;
         }
 
-        // internal "state" variables
-
         public void OpenFactory(FactoryId id)
         {
             if (_state.Id != null)
-            {
                 throw DomainError.Named("factory-already-created", "Factory was already created");
-                return;
 
-            }
             Apply(new FactoryOpened(id));
         }
 
@@ -43,22 +38,17 @@ namespace E011
         {
             //Print("?> Command: Assign employee {0} to factory", employeeName);
 
-            OpenedFactory();
+            ThrowExceptionIfNotOpenFactory();
 
             if (_state.ListOfEmployeeNames.Contains(employeeName))
             {
                 // yes, this is really weird check, but this factory has really strict rules.
                 // manager should've remembered that
                 throw DomainError.Named("more than 1 person", ":> the name of '{0}' only one employee can have", employeeName);
-
-                return;
             }
 
             if (employeeName == "bender")
-            {
                 throw DomainError.Named("bender-employee", ":> Guys with name 'bender' are trouble.");
-                return;
-            }
 
             DoPaperWork("Assign employee to the factory");
             Apply(new EmployeeAssignedToFactory(_state.Id, employeeName));
@@ -67,24 +57,16 @@ namespace E011
 
         public void TransferShipmentToCargoBay(string shipmentName, InventoryShipment shipment)
         {
-            OpenedFactory();
+            ThrowExceptionIfNotOpenFactory();
             //Print("?> Command: transfer shipment to cargo bay");
             if (_state.ListOfEmployeeNames.Count == 0)
-            {
                 throw DomainError.Named("unknown-employee", ":> There has to be somebody at factory in order to accept shipment");
-                return;
-            }
+            
             if (shipment.Cargo.Length == 0)
-            {
                 throw DomainError.Named("empty-InventoryShipments", ":> Empty InventoryShipments are not accepted!");
-                return;
-            }
 
             if (_state.ShipmentsWaitingToBeUnloaded.Count >= 2)
-            {
                 throw DomainError.Named("more-than-two-InventoryShipments", ":> More than two InventoryShipments can't fit into this cargo bay :(");
-                return;
-            }
 
             DoRealWork("opening cargo bay doors");
             Apply(new ShipmentTransferredToCargoBay(_state.Id, shipment));
@@ -99,23 +81,21 @@ namespace E011
 
         public void UnloadShipmentFromCargoBay(string employeeName)
         {
-            OpenedFactory();
+            ThrowExceptionIfNotOpenFactory();
             //Print("?> Command: Unload Shipment From Cargo Bay");
 
             if (!_state.ListOfEmployeeNames.Contains(employeeName))
             {
                 throw DomainError.Named("unknown-employee", ":> '{0}' not assigned to factory", employeeName);
-                return;
             }
 
             if (_state.ShipmentsWaitingToBeUnloaded.Count == 0)
             {
                 throw DomainError.Named("empty-InventoryShipments", ":> InventoryShipments not found");
-                return;
             }
 
             DoRealWork("unload shipment");
-            List<InventoryShipment> shipments = new List<InventoryShipment>();
+            var shipments = new List<InventoryShipment>();
             while (_state.ShipmentsWaitingToBeUnloaded.Count > 0)
             {
                 var parts = _state.ShipmentsWaitingToBeUnloaded.First();
@@ -127,7 +107,7 @@ namespace E011
 
         public void ProduceCar(string employeeName, string carModel, ICarBlueprintLibrary library)
         {
-            OpenedFactory();
+            ThrowExceptionIfNotOpenFactory();
 
             if (!_state.ListOfEmployeeNames.Contains(employeeName))
                 throw DomainError.Named("unknown-employee", ":> '{0}' not assigned to factory", employeeName);
@@ -141,7 +121,6 @@ namespace E011
             {
                 if (_state.GetNumberOfAvailablePartsQuantity(part.Name) < part.Quantity)
                     throw DomainError.Named("part-not-found", ":> {0} not found", part.Name);
-
             }
 
 
@@ -154,13 +133,13 @@ namespace E011
         void DoPaperWork(string workName)
         {
             //Print(" > Work:  papers... {0}... ", workName);
-
         }
+
         void DoRealWork(string workName)
         {
             //Print(" > Work:  heavy stuff... {0}...", workName);
-
         }
+
         void Apply(IEvent e)
         {
             // we record by jotting down notes in our journal
@@ -169,28 +148,10 @@ namespace E011
             _state.Mutate(e);
         }
 
-        void OpenedFactory()
+        void ThrowExceptionIfNotOpenFactory()
         {
             if(_state.Id==null)
                 throw DomainError.Named("factory-is-not-open", "Factory is not open");
-
         }
     }
-    // domain service
-
-
-
-    // FactoryState is a new class we added in this E005 sample to keep track of Factory state.
-    // This moves the location of where Factory state is stored from the Factory class itself
-    // to its own dedicated state class.  This is helpful because we can mark the
-    // the state class properties as variables that cannot be modified outside of the FactoryState class.
-    // (readonly, for example, is how we declared an instance of FactoryState at the top of this file)
-    // (and the ListOfEmployeeNames and ShipmentsWaitingToBeUnloaded lists below are also declared as readonly)
-    // This helps to ensure that you can ONLY MODIFY THE STATE OF THE FACTORY BY USING EVENTS that are known to have happened.
-
-    
-    
-    
-
-   
 }

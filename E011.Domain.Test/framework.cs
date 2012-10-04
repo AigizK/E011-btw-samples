@@ -4,10 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Serialization.Formatters.Binary;
-using E011;
 using NUnit.Framework;
 
-namespace E005_testing_use_cases
+namespace E011.Domain
 {
     /// <summary>
     /// <para>

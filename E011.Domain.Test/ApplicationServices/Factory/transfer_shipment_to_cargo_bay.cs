@@ -13,7 +13,6 @@ namespace E011.Domain.ApplicationServices.Factory
             Expect("empty-InventoryShipments");
         }
 
-        // Use Case: Empty Shipment and No Workers at the Factory
         [Test]
         public void empty_shipment_comes_to_empty_factory()
         {

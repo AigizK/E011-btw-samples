@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using E011;
 using NUnit.Framework;
 
-namespace E005_testing_use_cases
+namespace E011.Domain
 {
     // ReSharper disable InconsistentNaming
     public abstract class spec_syntax<T> : IListSpecifications where T : IIdentity

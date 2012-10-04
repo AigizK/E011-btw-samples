@@ -12,8 +12,7 @@ interface Factory(FactoryId Id)
         explicit "Employee '{employee}' produce car:{carModel}"
     CarProduced!(employee, string carModel, CarPart[] parts)
 
-
-
+    
     AssignEmployeeToFactory?(employee)
         explicit "Assign employee '{employeeName}'"
     EmployeeAssignedToFactory! (employee)
