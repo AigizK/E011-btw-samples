@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="ApplicationServices\Factory\factory.cs" />
     <Compile Include="Contracts\AbstractIdentity.cs" />
+    <Compile Include="Contracts\Builder.cs" />
     <Compile Include="Contracts\CarPart.cs" />
     <Compile Include="Contracts\ConcreteIdentity.cs" />
     <Compile Include="Contracts\Describe.cs" />

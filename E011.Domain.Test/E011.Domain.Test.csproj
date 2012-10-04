@@ -50,7 +50,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationServices\Folder\assign_employee_to_factory.cs" />
-    <Compile Include="Builder.cs" />
     <Compile Include="CompareObjects.cs" />
     <Compile Include="TestBlueprintLibrary.cs" />
     <Compile Include="factory_spec.cs" />
