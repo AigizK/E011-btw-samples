@@ -6,7 +6,7 @@ using System.Text;
 
 namespace E005_testing_use_cases
 {
-    public static class Describe
+    public partial class Describe
     {
         public static readonly IDictionary<Type, MethodInfo> Dict = ToDictionary();
 

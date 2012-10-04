@@ -53,7 +53,7 @@ namespace E005_testing_use_cases.unittest
 
             When(new ProduceCar(FactoryId.ForTest, "fry", "Ford"));
 
-            Expect(new ProduceCarEvent(FactoryId.ForTest, "Ford", new[] { new CarPart("chassis", 1), new CarPart("wheels", 4), new CarPart("engine", 1) }));
+            Expect(new CarProduced(FactoryId.ForTest,"fry", "Ford", new[] { new CarPart("chassis", 1), new CarPart("wheels", 4), new CarPart("engine", 1) }));
         }
     }
 }

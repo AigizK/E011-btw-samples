@@ -114,11 +114,8 @@ namespace E005_testing_use_cases
             var totalCountOfParts = shipment.Cargo.Sum(p => p.Quantity);
             if (totalCountOfParts > 10)
             {
-                Apply(new CurseWordUttered(_state.Id)
-                {
-                    TheWord = "Boltov tebe v korobky peredach",
-                    Meaning = "awe in the face of the amount of shipment delivered"
-                });
+                Apply(new CurseWordUttered(_state.Id, "Boltov tebe v korobky peredach",
+                                           "awe in the face of the amount of shipment delivered"));
             }
         }
 
@@ -170,7 +167,7 @@ namespace E005_testing_use_cases
             DoRealWork("produce car");
 
             var parts = new[] { new CarPart("chassis", 1), new CarPart("wheels", 4), new CarPart("engine", 1) };
-            Apply(new ProduceCarEvent(_state.Id, carModel, parts));
+            Apply(new CarProduced(_state.Id, employeeName, carModel, parts));
         }
 
         void DoPaperWork(string workName)
@@ -310,11 +307,11 @@ namespace E005_testing_use_cases
             }
         }
 
-        void When(ProduceCarEvent e)
+        void When(CarProduced e)
         {
             CreatedCars.Add(e.CarModel);
 
-            foreach (var carPart in e.CarParts)
+            foreach (var carPart in e.Parts)
             {
                 var removed = carPart.Quantity;
 
@@ -353,101 +350,7 @@ namespace E005_testing_use_cases
 
 
     }
-
-    #region Events
-
-    // notice that the "Serializable" attribute has been added above all events in this sample
-    // usually all event implementation/contracts either have the Serializable (BinaryFormatter) or
-    // DataContract (custom formatters) attributes above them so they can be serialized for saving/communication
-    [Serializable]
-    public class EmployeeAssignedToFactory : IEvent<FactoryId>
-    {
-        public string EmployeeName;
-
-        public EmployeeAssignedToFactory(FactoryId id, string employeeName)
-        {
-            EmployeeName = employeeName;
-            Id = id;
-        }
-
-        public override string ToString()
-        {
-            return string.Format("new worker joins our forces: '{0}'", EmployeeName);
-        }
-
-        public FactoryId Id { get; private set; }
-    }
-    [Serializable]
-    public class CurseWordUttered : IEvent<FactoryId>
-    {
-        public string TheWord;
-        public string Meaning;
-
-        public CurseWordUttered(FactoryId id)
-        {
-            Id = id;
-
-        }
-
-        public override string ToString()
-        {
-            return string.Format("'{0}' was heard within the walls. It meant:\r\n    '{1}'", TheWord, Meaning);
-        }
-        public FactoryId Id { get; private set; }
-    }
-    [Serializable]
-    public class ShipmentTransferredToCargoBay : IEvent<FactoryId>
-    {
-        public InventoryShipment Shipment;
-
-        public ShipmentTransferredToCargoBay(FactoryId id, InventoryShipment shipment)
-        {
-            Shipment = shipment;
-            Id = id;
-        }
-
-        public override string ToString()
-        {
-            var builder = new StringBuilder();
-            builder.AppendFormat("Shipment '{0}' transferred to cargo bay:", Shipment.Name).AppendLine();
-            foreach (var carPart in Shipment.Cargo)
-            {
-                builder.AppendFormat("     {0} {1} pcs", carPart.Name, carPart.Quantity).AppendLine();
-            }
-            return builder.ToString();
-        }
-        public FactoryId Id { get; private set; }
-    }
-
-    [Serializable]
-    public class UnloadedFromCargoBay : IEvent<FactoryId>
-    {
-        public string EmployeName;
-        public InventoryShipment[] InventoryShipments;
-
-        public UnloadedFromCargoBay(FactoryId id, string employeName, InventoryShipment[] inventoryShipments)
-        {
-            EmployeName = employeName;
-            InventoryShipments = inventoryShipments;
-            Id = id;
-        }
-
-        public override string ToString()
-        {
-            var builder = new StringBuilder();
-            builder.AppendFormat("{0} unload:", EmployeName).AppendLine();
-            foreach (var inventoryShipment in InventoryShipments)
-            {
-                builder.AppendFormat("\tshipment name '{0}' and parts:\r\n", inventoryShipment.Name);
-                foreach (var carPart in inventoryShipment.Cargo)
-                    builder.AppendFormat("\t\t{0} {1} pcs", carPart.Name, carPart.Quantity).AppendLine();
-            }
-
-            return builder.ToString();
-        }
-        public FactoryId Id { get; private set; }
-    }
-
+    
     [DataContract, Serializable]
     public sealed class InventoryShipment
     {
@@ -459,182 +362,6 @@ namespace E005_testing_use_cases
             Name = name;
             Cargo = cargo;
         }
-    }
-
-
-    [Serializable]
-    public class ProduceCarEvent : IEvent<FactoryId>
-    {
-        public string CarModel;
-        public CarPart[] CarParts;
-
-        public ProduceCarEvent(FactoryId id, string carModel, CarPart[] carParts)
-        {
-            CarModel = carModel;
-            CarParts = carParts;
-            Id = id;
-        }
-
-        public override string ToString()
-        {
-            var builder = new StringBuilder();
-            builder.AppendFormat("produce car {0}:", CarModel).AppendLine();
-            foreach (var carPart in CarParts)
-                builder.AppendFormat("     {0} {1} pcs", carPart.Name, carPart.Quantity).AppendLine();
-
-            return builder.ToString();
-        }
-        public FactoryId Id { get; private set; }
-    }
-
-    [DataContract]
-    public class FactoryOpened : IEvent<FactoryId>
-    {
-        [DataMember(Order = 1)]
-        public FactoryId Id { get; private set; }
-
-        public FactoryOpened(FactoryId id)
-        {
-            Id = id;
-        }
-
-        public FactoryOpened()
-        {
-        }
-
-        public override string ToString()
-        {
-            return string.Format("Opened factory(ID='{0}')", Id);
-        }
-    }
-
-    #endregion
-
-    #region Commands
-
-    [DataContract(Namespace = "Lokad.SaaS")]
-    public partial class AssignEmployeeToFactory : ICommand<FactoryId>
-    {
-        [DataMember(Order = 1)]
-        public FactoryId Id { get; private set; }
-        [DataMember(Order = 2)]
-        public string EmployeeName { get; private set; }
-
-        AssignEmployeeToFactory() { }
-        public AssignEmployeeToFactory(FactoryId id, string employeeName)
-        {
-            Id = id;
-            EmployeeName = employeeName;
-        }
-
-        public override string ToString()
-        {
-            return string.Format(@"Assign employee '{0}'", EmployeeName);
-        }
-    }
-
-    [DataContract(Namespace = "Lokad.SaaS")]
-    public partial class TransferShipmentToCargoBay : ICommand<FactoryId>
-    {
-        [DataMember(Order = 1)]
-        public FactoryId Id { get; private set; }
-        [DataMember(Order = 2)]
-        public string ShipmentName { get; private set; }
-        [DataMember(Order = 3)]
-        public CarPart[] CarParts { get; private set; }
-
-        public TransferShipmentToCargoBay() { }
-        public TransferShipmentToCargoBay(FactoryId id, string shipmentName, CarPart[] parts)
-        {
-            Id = id;
-            ShipmentName = shipmentName;
-            CarParts = parts;
-        }
-
-        public override string ToString()
-        {
-            return string.Format(@"Transfer shipment '{0}' to cargo bay:{1}"
-                    , ShipmentName
-                    , CarParts.Aggregate("", (x, y) => x + string.Format("\r\n{0}:{1}", y.Name, y.Quantity))
-                );
-        }
-    }
-
-    [DataContract(Namespace = "Lokad.SaaS")]
-    public partial class UnloadShipmentFromCargoBay : ICommand<FactoryId>
-    {
-        [DataMember(Order = 1)]
-        public FactoryId Id { get; private set; }
-        [DataMember(Order = 2)]
-        public string EmployeeName { get; private set; }
-
-        UnloadShipmentFromCargoBay() { }
-        public UnloadShipmentFromCargoBay(FactoryId id, string employeeName)
-        {
-            Id = id;
-            EmployeeName = employeeName;
-        }
-
-        public override string ToString()
-        {
-            return string.Format(@"Unload the cargo '{0}'", EmployeeName);
-        }
-    }
-
-
-    [DataContract(Namespace = "Lokad.SaaS")]
-    public partial class ProduceCar : ICommand<FactoryId>
-    {
-        [DataMember(Order = 1)]
-        public FactoryId Id { get; private set; }
-        [DataMember(Order = 2)]
-        public string EmployeeName { get; private set; }
-        [DataMember(Order = 3)]
-        public string CarModel { get; private set; }
-
-        ProduceCar() { }
-        public ProduceCar(FactoryId id, string employeeName, string carModel)
-        {
-            Id = id;
-            EmployeeName = employeeName;
-            CarModel = carModel;
-        }
-
-        public override string ToString()
-        {
-            return string.Format(@"Employee '{0}' produce car:{1}", EmployeeName, CarModel);
-        }
-    }
-    [DataContract]
-    public class OpenFactory : ICommand<FactoryId>
-    {
-        [DataMember(Order = 1)]
-        public FactoryId Id { get; private set; }
-
-        public OpenFactory(FactoryId id)
-        {
-            Id = id;
-        }
-
-        public OpenFactory()
-        {
-        }
-
-        public override string ToString()
-        {
-            return string.Format(@"Open factory(ID='{0}')", Id);
-        }
-    }
-
-
-    #endregion
-
-    public interface IFactoryApplicationService
-    {
-        void When(AssignEmployeeToFactory c);
-        void When(TransferShipmentToCargoBay c);
-        void When(UnloadShipmentFromCargoBay c);
-        void When(ProduceCar c);
     }
 
     public sealed class FactoryApplicationService : IFactoryApplicationService, IApplicationService
@@ -662,16 +389,26 @@ namespace E005_testing_use_cases
             _eventStore.AppendEventsToStream(c.Id, eventStream.StreamVersion, agg.Changes);
         }
 
+        public void When(ProduceCar c)
+        {
+            Update(c, ar => ar.ProduceCar(c.EmployeeName, c.CarModel, _library));
+        }
+
         public void When(AssignEmployeeToFactory c)
         {
             Update(c, ar => ar.AssignEmployeeToFactory(c.EmployeeName));
+        }
+
+        public void When(CurseWordUttered c)
+        {
+            //throw new NotImplementedException();
         }
 
         public void When(TransferShipmentToCargoBay c)
         {
             Update(c,
                    ar =>
-                   ar.TransferShipmentToCargoBay(c.ShipmentName, new InventoryShipment(c.ShipmentName, c.CarParts)));
+                   ar.TransferShipmentToCargoBay(c.ShipmentName, new InventoryShipment(c.ShipmentName, c.Parts)));
         }
 
         public void When(UnloadShipmentFromCargoBay c)
@@ -679,9 +416,9 @@ namespace E005_testing_use_cases
             Update(c, ar => ar.UnloadShipmentFromCargoBay(c.EmployeeName));
         }
 
-        public void When(ProduceCar c)
+        public void When(OpenFactory c)
         {
-            Update(c, ar => ar.ProduceCar(c.EmployeeName, c.CarModel, _library));
+            //throw new NotImplementedException();
         }
     }
 
