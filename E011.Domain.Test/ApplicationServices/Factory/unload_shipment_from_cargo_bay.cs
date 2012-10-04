@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using E011;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
-namespace E005_testing_use_cases.unittest
+namespace E011.Domain.ApplicationServices.Factory
 {
 // ReSharper disable InconsistentNaming
     public class unload_shipment_from_cargo_bay : factory_syntax

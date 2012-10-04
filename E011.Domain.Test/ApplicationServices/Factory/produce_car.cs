@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using E011;
+﻿using E005_testing_use_cases;
 using NUnit.Framework;
 
-namespace E005_testing_use_cases.unittest
+namespace E011.Domain.ApplicationServices.Factory
 {
     public class produce_car : factory_syntax
     {

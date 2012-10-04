@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using E011;
+﻿using E005_testing_use_cases;
 
-namespace E005_testing_use_cases
+namespace E011.Domain.ApplicationServices.Factory
 {
     public abstract class factory_syntax : spec_syntax<FactoryId>
     {

@@ -49,16 +49,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplicationServices\Folder\assign_employee_to_factory.cs" />
+    <Compile Include="ApplicationServices\Factory\assign_employee_to_factory.cs" />
+    <Compile Include="ApplicationServices\Factory\open_factory.cs" />
     <Compile Include="CompareObjects.cs" />
-    <Compile Include="TestBlueprintLibrary.cs" />
-    <Compile Include="factory_spec.cs" />
+    <Compile Include="DomainServices\TestBlueprintLibrary.cs" />
+    <Compile Include="ApplicationServices\Factory\factory_spec.cs" />
     <Compile Include="framework.cs" />
-    <Compile Include="ApplicationServices\Folder\produce_car.cs" />
+    <Compile Include="ApplicationServices\Factory\produce_car.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="spec_syntax.cs" />
-    <Compile Include="ApplicationServices\Folder\transfer_shipment_to_cargo_bay.cs" />
-    <Compile Include="ApplicationServices\Folder\unload_shipment_from_cargo_bay.cs" />
+    <Compile Include="ApplicationServices\Factory\transfer_shipment_to_cargo_bay.cs" />
+    <Compile Include="ApplicationServices\Factory\unload_shipment_from_cargo_bay.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\E011.Domain\E011.Domain.csproj">

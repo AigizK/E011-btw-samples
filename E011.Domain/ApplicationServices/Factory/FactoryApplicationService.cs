@@ -56,7 +56,7 @@ namespace E011
 
         public void When(OpenFactory c)
         {
-            //throw new NotImplementedException();
+            Update(c, ar => ar.OpenFactory(c.Id));
         }
     }
 }
